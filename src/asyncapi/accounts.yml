@@ -1,0 +1,57 @@
+asyncapi: "2.0.0"
+info:
+  title: Accounts-Service
+  version: "1.0.0"
+  contact:
+    name: Manuel Ottlik
+    email: manuel.ottlik@stud.hs-hannover.de
+  license:
+    name: MIT
+tags:
+  - name: accounts
+
+defaultContentType: application/json
+
+channels:
+  evt.htp.re.accounts.created:
+    subscribe:
+      summary: "An account was created."
+      tags:
+        - name: accounts
+      message:
+        $ref: "#/components/messages/AccountCreated"
+  evt.htp.re.accounts.updated:
+    subscribe:
+      summary: "An account was updated."
+      tags:
+        - name: accounts
+      message:
+        $ref: "#/components/messages/AccountUpdated"
+  evt.htp.re.accounts.deleted:
+    subscribe:
+      summary: "An account was deleted."
+      tags:
+        - name: accounts
+      message:
+        $ref: "#/components/messages/AccountDeleted"
+
+components:
+  messages:
+    AccountCreated:
+      payload:
+        $ref: "#/components/schemas/AccountCloudEvent"
+    AccountUpdated:
+      payload:
+        $ref: "#/components/schemas/AccountCloudEvent"
+    AccountDeleted:
+      payload:
+        $ref: "defaults.yml#/components/schemas/EmptyCloudEvent"
+
+  schemas:
+    AccountCloudEvent:
+      allOf:
+        - $ref: "defaults.yml#/components/schemas/DefaultCloudEvent"
+        - type: object
+          properties:
+            data:
+              $ref: "../openapi/accounts.yml#/components/schemas/Account"

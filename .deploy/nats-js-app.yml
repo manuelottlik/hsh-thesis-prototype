@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nats-js
+  namespace: argocd
+  finalizers:
+   - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  source:
+   repoURL: https://github.com/manuelottlik/hsh-thesis-prototype.git
+   targetRevision: main
+   path: .deploy/nats-js
+  destination:
+   server: https://kubernetes.default.svc
+   namespace: nats-io
+  syncPolicy:
+   automated:
+    prune: true
+    selfHeal: true
+   syncOptions:
+    - CreateNamespace=true

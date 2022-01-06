@@ -1,0 +1,289 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: Accounts-Service
+  contact:
+    email: manuel.ottlik@stud.hs-hannover.de
+  license:
+    name: MIT
+servers:
+  - url: 'https://accounts.rest-events.manuelottlik.de'
+tags:
+  - name: accounts
+
+paths:
+  /accounts:
+    get:
+      description: Get all accounts
+      operationId: getAccounts
+      tags:
+        - accounts
+      responses:
+        "200":
+          $ref: "#/components/responses/AccountCollection"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    post:
+      description: Create a account
+      operationId: createAccount
+      tags:
+        - accounts
+      requestBody:
+        $ref: "#/components/requestBodies/Account"
+      responses:
+        "201":
+          $ref: "#/components/responses/Account"
+        "422":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+  /accounts/{accountId}:
+    parameters:
+      - $ref: "#/components/parameters/AccountId"
+    get:
+      description: Info for a specific Account
+      operationId: getAccountById
+      tags:
+        - accounts
+      responses:
+        "200":
+          $ref: "#/components/responses/Account"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    put:
+      description: update a specific account
+      operationId: updateAccount
+      tags:
+        - accounts
+      requestBody:
+        $ref: "#/components/requestBodies/Account"
+      responses:
+        "201":
+          $ref: "#/components/responses/Account"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        "422":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    delete:
+      description: delete a account
+      operationId: deleteAccount
+      tags:
+        - accounts
+      responses:
+        "204":
+          $ref: "defaults.yml#/components/responses/DeletedObject"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+
+  /types:
+    get:
+      description: Get all types
+      operationId: getTypes
+      tags:
+        - types
+      responses:
+        "200":
+          $ref: "#/components/responses/TypeCollection"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    post:
+      description: Create a type
+      operationId: createType
+      tags:
+        - types
+      requestBody:
+        $ref: "#/components/requestBodies/Type"
+      responses:
+        "201":
+          $ref: "#/components/responses/Type"
+        "422":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+  /types/{typeId}:
+    parameters:
+      - $ref: "#/components/parameters/TypeId"
+    get:
+      description: Info for a specific Type
+      operationId: getTypeById
+      tags:
+        - types
+      responses:
+        "200":
+          $ref: "#/components/responses/Type"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    put:
+      description: update a specific type
+      operationId: updateType
+      tags:
+        - types
+      requestBody:
+        $ref: "#/components/requestBodies/Type"
+      responses:
+        "201":
+          $ref: "#/components/responses/Type"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        "422":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    delete:
+      description: delete a type
+      operationId: deleteType
+      tags:
+        - types
+      responses:
+        "204":
+          $ref: "defaults.yml#/components/responses/DeletedObject"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+
+components:
+  responses:
+    AccountCollection:
+      description: collection of accounts
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AccountCollection"
+    Account:
+      description: single account
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Account"
+    TypeCollection:
+      description: collection of types
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TypeCollection"
+    Type:
+      description: single type
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Type"
+
+  requestBodies:
+    Account:
+      required: true
+      description: account to add
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Account"
+    Type:
+      required: true
+      description: type to add
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Type"
+
+  parameters:
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: The id of the account to retrieve
+      schema:
+        type: integer
+    TypeId:
+      name: typeId
+      in: path
+      required: true
+      description: The id of the type to retrieve
+      schema:
+        type: integer
+
+  schemas:
+    AccountCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Account"
+      required:
+        - data
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the object
+          example: 1
+        name:
+          type: string
+          description: name of the account
+          example: Girokonto
+          minLength: 2
+          maxLength: 255
+        typeId:
+          type: integer
+          description: id of the type this account has
+          example: 1
+        value:
+          type: string
+          nullable: false
+          pattern: '^([+-])?(\d+)(?:\.(\d+))?$'
+          description: Actual monetary value as string preceded by a minus if negative or plus if positive. Plus can be omitted.
+          example: "156570.5932"
+        currency:
+          type: string
+          nullable: false
+          pattern: '^[A-Z]{3}$'
+          description: Three letter abbreviation of currency as defined in ISO-4217.
+          example: EUR
+        customerId:
+          type: integer
+          description: id of the customer this account belongs to
+          example: 1
+      required:
+        - id
+        - name
+        - typeId
+        - value
+        - currency
+        - customerId
+
+    TypeCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Type"
+      required:
+        - data
+    Type:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the object
+          example: 1
+        label:
+          type: string
+          description: label of the type
+          example: Girokonto
+          minLength: 2
+          maxLength: 255
+      required:
+        - id
+        - label

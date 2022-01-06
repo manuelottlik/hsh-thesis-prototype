@@ -1,0 +1,29 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: customers-cqrs-ingress
+spec:
+  entryPoints:
+   - web
+   - websecure
+  routes:
+  - match: Host(`customers.rest-events.manuelottlik.de`)
+    kind: Rule
+    services:
+      - name: customers-cqrs-service
+        port: 8080
+  tls:
+   certResolver: letsencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customers-cqrs-service
+  labels:
+    app: customers-cqrs-middleware
+spec:
+  ports:
+    - port: 8080
+      name: customers-cqrs-middleware
+  selector:
+    app: customers-cqrs-middleware

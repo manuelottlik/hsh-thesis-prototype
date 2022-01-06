@@ -1,0 +1,29 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nats-js-app
+  namespace: argocd
+  finalizers:
+   - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+   namespace: nats-io
+   server: https://kubernetes.default.svc
+  project: default
+  source:
+   repoURL: https://nats-io.github.io/k8s/helm/charts/
+   targetRevision: "*"
+   chart: nack
+   helm:
+    values: |
+      jetstream:
+       nats:
+        url: "nats://nats-app:4222"
+
+  syncPolicy:
+   automated:
+    prune: true
+    selfHeal: true
+   syncOptions:
+   - CreateNamespace=true

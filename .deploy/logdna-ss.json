@@ -1,0 +1,29 @@
+{
+  "kind": "SealedSecret",
+  "apiVersion": "bitnami.com/v1alpha1",
+  "metadata": {
+    "name": "logdna-agent-key",
+    "namespace": "logdna-agent",
+    "creationTimestamp": null,
+    "annotations": {
+      "sealedsecrets.bitnami.com/cluster-wide": "true"
+    }
+  },
+  "spec": {
+    "template": {
+      "metadata": {
+        "name": "logdna-agent-key",
+        "namespace": "logdna-agent",
+        "creationTimestamp": null,
+        "annotations": {
+          "sealedsecrets.bitnami.com/cluster-wide": "true",
+          "sealedsecrets.bitnami.com/managed": "true"
+        }
+      },
+      "data": null
+    },
+    "encryptedData": {
+      "logdna-agent-key": "AgB6ExdSOpDk3im64aHfXnTchh/PnHM+Z0u5QmdG4CsvCMVrqND52GpCeDe+eyVS6qzcn6TMN0i0Rl2/rktpt4Qo0tqOSp0ZVbSb1txdGnV1AEHZQNGo9b5IpWfNXuXW3G/OA+PYCsca9Djf6vr7OEn2czPg7GhE6hEUPCAMiJsQidVzhuwcZkKU4GMAlYDIrcXcQPLwRkSYDZlTjLebZRCuk2rjA6E5FhpTfkWPbXmWcsxYwmtq9lpz3W3cWLmLSvsu30l9VDYoyfC1hGButGvw/CwZ3rmsvuLK9KM36fifUbS576/IGRpyhS9zLA565y9SWDN7GJBfjxCzXeg8HJQJdVMj12xzM7UKXpar5b8UBpHP/sKRQ6A02xJNt57z1sAsWZNGakcoZXs8K5uLczeAtqQvxg+fO1mZivdmlGIJxuXdUhdWvM9go5SYV6Okc5F9eW4vhmQCCJpKARFN0JoibeRRwNt8G3s4oVCsWSoto79gVakAhhCifXFHURICTMOjrV+XDpzMewF3bhFg4nyx2dx2IDH7+l4B2VgjMbAsu8ySLIirno3jm7CTgTj6QO53H1QVtf3AAhQlq5M+hWJR+gXnccfPv5aif3pZNAAQtaUQ5igaJ8EGzT91mb7kLdQ77gp6qFFY/kUtQIV1sR5O+duQ91LkL/TBOXuZzBJRguXnqtTkS/yUM7SZ00BtTNfPilXiqjHO6tS+xrBTulxgXPOBOzRNJ9NibEITVWVlIA=="
+    }
+  }
+}

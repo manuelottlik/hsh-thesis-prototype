@@ -1,0 +1,29 @@
+{
+  "name": "rabbitmq-in-cluster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "body-parser": "^1.19.0",
+    "cloudevents": "^4.0.3",
+    "express": "^4.17.1",
+    "express-interceptor": "^1.2.0",
+    "js-yaml": "^4.1.0",
+    "json-server": "^0.16.3",
+    "lowdb": "^1.0.0",
+    "nats": "^2.1.0",
+    "nocache": "^3.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2"
+  }
+}

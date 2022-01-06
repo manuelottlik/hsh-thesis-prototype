@@ -1,0 +1,54 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: assets-app
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: assets-app
+  template:
+    metadata:
+      labels:
+        app: assets-app
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      volumes:
+        - name: assets-pv-storage
+          persistentVolumeClaim:
+            claimName: assets-pv-claim
+      containers:
+        - name: assets-re-middleware
+          image: ghcr.io/manuelottlik/htp-re-middleware
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 8088
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          env:
+          - name: EVENT_NOTIFICATIONS
+            value: 'true'
+          - name: DESTINATION_URL
+            value: http://localhost:8080
+          - name: CE_INGESTOR_URL
+            valueFrom:
+              configMapKeyRef:
+                name: nats-config
+                key: ce-ingestor-url
+        - name: assets-app
+          image: ghcr.io/manuelottlik/htp-rest-events-assets
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 8080
+           - containerPort: 8081
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          volumeMounts:
+            - name: assets-pv-storage
+              mountPath: /etc/data/db

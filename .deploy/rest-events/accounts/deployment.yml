@@ -1,0 +1,52 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: accounts-app
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: accounts-app
+  template:
+    metadata:
+      labels:
+        app: accounts-app
+    spec:
+      volumes:
+        - name: accounts-pv-storage
+          persistentVolumeClaim:
+            claimName: accounts-pv-claim
+      imagePullSecrets:
+        - name: ghcr
+      containers:
+        - name: accounts-re-middleware
+          image: ghcr.io/manuelottlik/htp-re-middleware
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 8088
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          env:
+          - name: DESTINATION_URL
+            value: http://localhost:8080
+          - name: CE_INGESTOR_URL
+            valueFrom:
+              configMapKeyRef:
+                name: nats-config
+                key: ce-ingestor-url
+        - name: accounts-app
+          image: ghcr.io/manuelottlik/htp-rest-events-accounts
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 8080
+           - containerPort: 8081
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          volumeMounts:
+            - name: accounts-pv-storage
+              mountPath: /etc/data/db

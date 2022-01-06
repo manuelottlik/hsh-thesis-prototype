@@ -1,0 +1,23 @@
+{
+  "kind": "SealedSecret",
+  "apiVersion": "bitnami.com/v1alpha1",
+  "metadata": {
+    "name": "ghcr",
+    "namespace": "nats-io",
+    "creationTimestamp": null
+  },
+  "spec": {
+    "template": {
+      "metadata": {
+        "name": "ghcr",
+        "namespace": "nats-io",
+        "creationTimestamp": null
+      },
+      "type": "kubernetes.io/dockerconfigjson",
+      "data": null
+    },
+    "encryptedData": {
+      ".dockerconfigjson": "AgBavkV4Vygx1mwTlYym7U5M/TfUNrTpsywUUTonao8Whr3aBjI9djd2eC5y3hs3XWGueZDAIwzwne5yoR2pVitM1eLsl0UtbSLgLZgaEMeHeDXQG621S3uYYg5LNq8IDkWWEQDz+2HFD7lYYuLVMdrL881S0zhbaUC4Mbo7LmLCHosHq56HF8VlCkgMCz2SyNnXErtcr/wwkgIO3hy1k+yEX/Ai5pNjRqpYymoEJbcZ2mJbHwMsY/ECFMf6yA4aynlRYIEOq6HO6OlybgG/d9qJSabkSttR9ufcWBHZ6zQkLaRaMzZr+ZHwPcnQOrP4BpylfBYsxGSX6qz1otXJbMz73cwkYMBR16IfqbAxlmDvZ3vF4E2hVQdtfChYnPAsCX8JIdSxD5hXZAv3Yu0eITs48rIp2R5t7ibsD6VMI11/+PI/hJVC4hdJ0PGVD91lHldOVHsCgsw/LuDNHlC12HOEdKsMsVYvRSd5JzZm25Ije4M/bpXKSz4PUiiAXtDE9I3NOdr6TeQiBIG2B88lGfkSI+0PGFmFJkdcG++lJ1BguyrULoSw7lDnFD8pXesqRIHOrSOAcq9P98c6La6Vuq7GDNBLViteaEA5LUE82O+PoraNqH5oy0YIW9E8VCDNd0eeZ7aFGa8dbQLXYuUCIAiFNKKCRVVb7htynGl+iekA2Faw1L1DkuEpHIU5wWtG+dqisbC5LKZY1YJw++skMM28jSh05WysN+vtylC99j5frrHs51c1/Bv1CZJANvpR8jRQl1nh5BVBYTQNtIjiL41IMdXMX+TLe1YE2NowNnSuSrpOaLFlxP39L9z1gmGggLjXSBqHI/VY/VqRToEIFBtT+rvnpiGRG8TNxq51xL4xvnqTtgZqZXFTdeFtTSawxoWzC0VCtRlE3GvqSut4cJCnU1iSjGwtzFtKOgHi0BQzjd+ef4RTZHOCtrXg8yj/YZ0er0pjVvHnZZYoPDC3UWQ0kZ8J202LeJ8QfHdiTiSIMfgWZRRX"
+    }
+  }
+}

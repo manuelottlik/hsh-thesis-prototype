@@ -1,0 +1,32 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: customers-cqrs-middleware
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customers-cqrs-middleware
+  template:
+    metadata:
+      labels:
+        app: customers-cqrs-middleware
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      containers:
+        - name: cqrs-middleware
+          image: ghcr.io/manuelottlik/htp-cqrs-middleware
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 8080
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          env:
+           - name: QUERY_SERVICE_URL
+             value: http://customers-query-service:8080
+           - name: COMMAND_SERVICE_URL
+             value: http://customers-command-service:8088

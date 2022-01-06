@@ -1,0 +1,206 @@
+name: build rest-events docker images
+on:
+  push:
+    paths-ignore:
+      - ".deploy"
+  workflow_dispatch:
+
+jobs:
+  build-ce-dispatcher-service:
+    name: build ce-dispatcher service
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-cloudevents-poc-ce-dispatcher
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=ce-dispatcher .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  build-ce-ingestor-service:
+    name: build ce-ingestor service
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-cloudevents-poc-ce-ingestor
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=ce-ingestor .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  build-customers-query-service:
+    name: build customers-query service
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-rest-events-customers-query
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=customers-query .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  build-customers-command-service:
+    name: build customers-command service
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-rest-events-customers-command
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=customers-command .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  build-accounts-service:
+    name: build accounts service
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-rest-events-accounts
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=accounts .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  build-assets-service:
+    name: build assets service
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-rest-events-assets
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=assets .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  build-welcome-letter-job:
+    name: build welcome letter job
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-welcome-letter-job
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=welcome-letter-job .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  build-re-middleware:
+    name: build rest-events middleware
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-re-middleware
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=re-middleware .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  build-cqrs-middleware:
+    name: build cqrs middleware
+    runs-on: ubuntu-latest
+    container: docker:latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@main
+
+      - name: build and push docker image
+        env:
+          REGISTRY_TOKEN: ${{secrets.GHCR_TOKEN}}
+          REGISTRY_URL: ghcr.io/manuelottlik
+          IMAGE_NAME: htp-cqrs-middleware
+          IMAGE_TAG: latest
+        run: |
+          echo $REGISTRY_TOKEN | docker login --username manuelottlik --password-stdin $REGISTRY_URL
+          docker build -t $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG --build-arg SERVICE=cqrs-middleware .
+          docker push $REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG
+
+  update-apps:
+    name: update all rest-events applications with argocd
+    runs-on: ubuntu-latest
+    needs:
+      - build-ce-dispatcher-service
+      - build-ce-ingestor-service
+      - build-customers-query-service
+      - build-customers-command-service
+      - build-accounts-service
+      - build-assets-service
+      - build-welcome-letter-job
+      - build-re-middleware
+      - build-cqrs-middleware
+    steps:
+      - name: update apps with argocd cli
+        env:
+          VERSION: v2.0.3
+          USERNAME: ${{ secrets.ARGOCD_USERNAME }}
+          PASSWORD: ${{ secrets.ARGOCD_PASSWORD }}
+        run: |
+          # sudo mkdir /usr/local/bin/argocd
+          sudo curl -N -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/${VERSION}/argocd-linux-amd64
+          sudo chmod +x /usr/local/bin/argocd
+
+          argocd login argocd.manuelottlik.de --username $USERNAME --password $PASSWORD
+          argocd app actions run rest-events restart --kind Deployment --all --grpc-web
+          argocd app actions run nats-js restart --kind Deployment --all --grpc-web

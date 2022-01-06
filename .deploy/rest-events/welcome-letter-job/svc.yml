@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: welcome-letter-job-service
+  labels:
+    app: welcome-letter-job-app
+spec:
+  ports:
+    - port: 8081
+      name: welcome-letter-job-events
+  selector:
+    app: welcome-letter-job-app

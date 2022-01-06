@@ -1,0 +1,74 @@
+components:
+  responses:
+    DeletedObject:
+      description: the object was successfully deleted
+    DefaultProblem: # fallback problem
+      description: a problem occurred
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/DefaultProblem"
+    ValidationProblem: # typically thrown on HTTP 409 or HTTP 422
+      description: a validation problem occurred
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ValidationProblem"
+
+  schemas:
+    DefaultProblem:
+      type: object
+      required:
+        - type
+        - status
+        - title
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code returned for the problem.
+          example: 400
+        type:
+          type: string
+          format: url
+          description: URI pointing to a human readable documentation.
+          default: about:blank
+        title:
+          type: string
+          description: Short, human readable description of the problem.
+          example: The provided e-mail address is already taken.
+        detail:
+          type: string
+          description: Human readable explanation of the problem.
+          example: The e-mail adress serves as an identifier and thus can only be taken once.
+        instance:
+          type: string
+          description: Endpoint where the problem occurred.
+          example: /users
+
+    ValidationProblem:
+      allOf:
+        - $ref: "#/components/schemas/DefaultProblem"
+        - type: object
+          description: Problem object thrown when request is syntactically correct, but has form validation errors (e.g. in HTTP 400 or HTTP 422).
+          properties:
+            violations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Violation'
+
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Form field that is violated.
+          example: name
+        rule:
+          type: string
+          description: Name of the rule violated.
+          example: minLength
+        message:
+          type: string
+          description: String in natural language describing the problem.
+          example: Field 'name' needs to be at least 5 characters long.

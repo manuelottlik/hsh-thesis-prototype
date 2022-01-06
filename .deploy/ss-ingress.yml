@@ -1,0 +1,18 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sealed-secrets-ingress
+  namespace: default
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`ss.manuelottlik.de`)
+      kind: Rule
+      services:
+        - name: sealed-secrets-app
+          port: 8080
+          path: /v1/cert.pem
+  tls:
+    certResolver: letsencrypt

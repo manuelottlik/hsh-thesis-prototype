@@ -1,0 +1,58 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: customers-command-app
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customers-command-app
+  template:
+    metadata:
+      labels:
+        app: customers-command-app
+    spec:
+      volumes:
+        - name: customers-command-pv-storage
+          persistentVolumeClaim:
+            claimName: customers-command-pv-claim
+      imagePullSecrets:
+        - name: ghcr
+      containers:
+        - name: customers-command-re-middleware
+          image: ghcr.io/manuelottlik/htp-re-middleware
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 8088
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          env:
+          - name: DESTINATION_URL
+            value: http://localhost:8080
+          - name: CE_INGESTOR_URL
+            valueFrom:
+              configMapKeyRef:
+                name: nats-config
+                key: ce-ingestor-url
+        - name: customers-command-app
+          image: ghcr.io/manuelottlik/htp-rest-events-customers-command
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 8080
+           - containerPort: 8081
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          volumeMounts:
+            - name: customers-command-pv-storage
+              mountPath: /etc/data/db
+          env:
+           - name: CE_INGESTOR_URL
+             valueFrom:
+               configMapKeyRef:
+                 name: nats-config
+                 key: ce-ingestor-url

@@ -1,0 +1,47 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nats-app
+  namespace: argocd
+  finalizers:
+   - resources-finalizer.argocd.argoproj.io
+   
+spec:
+  destination:
+   namespace: nats-io
+   server: https://kubernetes.default.svc
+  project: default
+  source:
+   repoURL: https://nats-io.github.io/k8s/helm/charts/
+   targetRevision: "*"
+   chart: nats
+   helm:
+    values: |
+      nats:
+        antiAffinity: soft
+        jetstream:
+          enabled: true
+          memStorage:
+            enabled: true
+            size: 1Gi
+          fileStorage:
+            enabled: true
+            storageDirectory: /pvs/jetstream-pv
+            size: 2Gi
+            storageClassName: local-storage
+
+      cluster:
+        enabled: true
+        replicas: 3
+        name: nats-server
+
+      natsbox:
+        enabled: true
+
+  syncPolicy:
+   automated:
+    prune: true
+    selfHeal: true
+   syncOptions:
+   - CreateNamespace=true

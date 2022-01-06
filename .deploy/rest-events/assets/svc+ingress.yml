@@ -1,0 +1,31 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: assets-ingress
+spec:
+  entryPoints:
+   - web
+   - websecure
+  routes:
+    - match: Host(`assets.rest-events.manuelottlik.de`)
+      kind: Rule
+      services:
+        - name: assets-service
+          port: 8088
+  tls:
+   certResolver: letsencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: assets-service
+  labels:
+    app: assets-app
+spec:
+  ports:
+    - port: 8088
+      name: assets-re-middleware
+    - port: 8081
+      name: assets-events
+  selector:
+    app: assets-app

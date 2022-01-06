@@ -1,0 +1,56 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: welcome-letter-job-ce-dispatcher
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: welcome-letter-job-ce-dispatcher
+  template:
+    metadata:
+      labels:
+        app: welcome-letter-job-ce-dispatcher
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      volumes:
+        - name: subscriptions-config-volume
+          configMap:
+            name: welcome-letter-job-subscriptions-config
+      containers:
+        - name: ce-dispatcher
+          image: ghcr.io/manuelottlik/htp-cloudevents-poc-ce-dispatcher
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          volumeMounts:
+            - name: subscriptions-config-volume
+              mountPath: /etc/config
+          env:
+            - name: NATS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: nats-config
+                  key: nats-url
+            - name: TARGET_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: welcome-letter-job-subscriptions-config
+                  key: target-url
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: welcome-letter-job-subscriptions-config
+data:
+  target-url: http://welcome-letter-job-service:8081
+  subscriptions.yml: |
+    - path: /
+      subject: "evt.htp.re.customers.created"
+      consumer: welcome-letter-job-customers-created

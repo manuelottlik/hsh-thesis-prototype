@@ -1,0 +1,156 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: Customers-Service
+  contact:
+    email: manuel.ottlik@stud.hs-hannover.de
+  license:
+    name: MIT
+servers:
+  - url: 'https://customers.rest-events.manuelottlik.de'
+tags:
+  - name: customers
+
+paths:
+  /customers:
+    get:
+      description: Get all customers
+      operationId: getCustomers
+      tags:
+        - customers
+      responses:
+        "200":
+          $ref: "#/components/responses/CustomerCollection"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    post:
+      description: Create a customer
+      operationId: createCustomer
+      tags:
+        - customers
+      requestBody:
+        $ref: "#/components/requestBodies/Customer"
+      responses:
+        "201":
+          $ref: "#/components/responses/Customer"
+        "422":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+  /customers/{customerId}:
+    parameters:
+      - $ref: "#/components/parameters/CustomerId"
+    get:
+      description: Info for a specific Customer
+      operationId: getCustomerById
+      tags:
+        - customers
+      responses:
+        "200":
+          $ref: "#/components/responses/Customer"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    put:
+      description: update a specific customer
+      operationId: updateCustomer
+      tags:
+        - customers
+      requestBody:
+        $ref: "#/components/requestBodies/Customer"
+      responses:
+        "201":
+          $ref: "#/components/responses/Customer"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        "422":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    delete:
+      description: delete a customer
+      operationId: deleteCustomer
+      tags:
+        - customers
+      responses:
+        "204":
+          $ref: "defaults.yml#/components/responses/DeletedObject"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+
+components:
+  responses:
+    CustomerCollection:
+      description: collection of customers
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CustomerCollection"
+    Customer:
+      description: single customer
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Customer"
+
+  requestBodies:
+    Customer:
+      required: true
+      description: customer to add
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Customer"
+
+  parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The id of the customer to retrieve
+      schema:
+        type: integer
+
+  schemas:
+    CustomerCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Customer"
+      required:
+        - data
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the customer
+          example: 1
+        firstName:
+          type: string
+          description: first name of the customer
+          example: Peter
+          minLength: 2
+          maxLength: 255
+        lastName:
+          type: string
+          description: last name of the customer
+          example: Lustig
+          minLength: 2
+          maxLength: 255
+        birthday:
+          type: string
+          format: date
+          description: birthday of the customer
+          example: "1976-05-02"
+      required:
+        - id
+        - firstName
+        - lastName
+        - birthday

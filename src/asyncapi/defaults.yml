@@ -1,0 +1,54 @@
+components:
+  schemas:
+    DefaultCloudEvent:
+      type: object
+      required:
+        - specversion
+        - id
+        - source
+        - type
+      properties:
+        specversion:
+          type: string
+          description: The version of the CloudEvents specification which the event uses.
+          enum:
+            - "1.0"
+          example: 1.0
+        id:
+          type: string
+          minLength: 1
+          description: Identifies the event.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        source:
+          type: string
+          format: uri-reference
+          minLength: 1
+          description: Identifies the context in which an event happened.
+          example: https://service.rest-events.manuelottlik.de
+        type:
+          type: string
+          minLength: 1
+          description: Describes the type of event related to the originating occurrence.
+          example: evt.htp.re.entity.operation
+        datacontenttype:
+          type: string
+          description: Content type of the data value. Must adhere to RFC 2046 format.
+          example: application/json
+        dataschema:
+          type: string
+          description: Identifies the schema that data adheres to.
+        subject:
+          type: string
+          description: Describes the subject of the event in the context of the event producer (identified by source).
+          example: "1"
+        time:
+          type: string
+          format: date-time
+          description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
+          example: "2002-10-02T15:00:00Z"
+    EmptyCloudEvent:
+      allOf:
+        - $ref: '#/components/schemas/DefaultCloudEvent'
+        - type: object
+          properties:
+            data: {}

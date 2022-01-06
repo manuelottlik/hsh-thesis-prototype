@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rest-events
+  namespace: argocd
+  finalizers:
+   - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/manuelottlik/hsh-thesis-prototype.git
+    targetRevision: main
+    path: .deploy/rest-events
+    directory:
+      recurse: true
+  destination:
+   server: https://kubernetes.default.svc
+   namespace: rest-events
+  syncPolicy:
+   automated:
+    prune: true
+    selfHeal: true
+   syncOptions:
+    - CreateNamespace=true

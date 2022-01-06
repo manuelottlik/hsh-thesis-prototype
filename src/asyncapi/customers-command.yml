@@ -1,0 +1,56 @@
+asyncapi: "2.0.0"
+info:
+  title: Customers-Service
+  version: "1.0.0"
+  contact:
+    name: Manuel Ottlik
+    email: manuel.ottlik@stud.hs-hannover.de
+  license:
+    name: MIT
+tags:
+  - name: customers
+defaultContentType: application/json
+
+channels:
+  evt.htp.re.customers.created:
+    publish:
+      summary: "A customer was created."
+      tags:
+        - name: customers
+      message:
+        $ref: "#/components/messages/CustomerCreated"
+  evt.htp.re.customers.updated:
+    publish:
+      summary: "A customer was updated."
+      tags:
+        - name: customers
+      message:
+        $ref: "#/components/messages/CustomerUpdated"
+  evt.htp.re.customers.deleted:
+    publish:
+      summary: "A customer was deleted."
+      tags:
+        - name: customers
+      message:
+        $ref: "#/components/messages/CustomerDeleted"
+
+components:
+  messages:
+    CustomerCreated:
+      payload:
+        $ref: "#/components/schemas/CustomerCloudEvent"
+    CustomerUpdated:
+      payload:
+        $ref: "#/components/schemas/CustomerCloudEvent"
+    CustomerDeleted:
+      payload:
+        $ref: "defaults.yml#/components/schemas/EmptyCloudEvent"
+
+  schemas:
+    CustomerCloudEvent:
+      allOf:
+        - $ref: "defaults.yml#/components/schemas/DefaultCloudEvent"
+        - type: object
+          properties:
+            data:
+              $ref: "../openapi/customers.yml#/components/schemas/Customer"

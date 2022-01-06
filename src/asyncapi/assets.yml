@@ -1,0 +1,57 @@
+asyncapi: "2.0.0"
+info:
+  title: Assets-Service
+  version: "1.0.0"
+  contact:
+    name: Manuel Ottlik
+    email: manuel.ottlik@stud.hs-hannover.de
+  license:
+    name: MIT
+tags:
+  - name: assets
+
+defaultContentType: application/json
+
+channels:
+  evt.htp.re.assets.created:
+    subscribe:
+      summary: "An asset was created."
+      tags:
+        - name: assets
+      message:
+        $ref: "#/components/messages/AssetCreated"
+  evt.htp.re.assets.updated:
+    subscribe:
+      summary: "An asset was updated."
+      tags:
+        - name: assets
+      message:
+        $ref: "#/components/messages/AssetUpdated"
+  evt.htp.re.assets.deleted:
+    subscribe:
+      summary: "An asset was deleted."
+      tags:
+        - name: assets
+      message:
+        $ref: "#/components/messages/AssetDeleted"
+
+components:
+  messages:
+    AssetCreated:
+      payload:
+        $ref: "#/components/schemas/AssetCloudEvent"
+    AssetUpdated:
+      payload:
+        $ref: "#/components/schemas/AssetCloudEvent"
+    AssetDeleted:
+      payload:
+        $ref: "defaults.yml#/components/schemas/EmptyCloudEvent"
+
+  schemas:
+    AssetCloudEvent:
+      allOf:
+        - $ref: "defaults.yml#/components/schemas/DefaultCloudEvent"
+        - type: object
+          properties:
+            data:
+              $ref: "../openapi/assets.yml#/components/schemas/Asset"

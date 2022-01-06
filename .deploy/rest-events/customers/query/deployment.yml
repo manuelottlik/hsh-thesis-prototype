@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: customers-query-app
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customers-query-app
+  template:
+    metadata:
+      labels:
+        app: customers-query-app
+    spec:
+      volumes:
+        - name: customers-query-pv-storage
+          persistentVolumeClaim:
+            claimName: customers-query-pv-claim
+      imagePullSecrets:
+        - name: ghcr
+      containers:
+        - name: customers-query-app
+          image: ghcr.io/manuelottlik/htp-rest-events-customers-query
+          imagePullPolicy: Always
+          ports:
+           - containerPort: 8080
+           - containerPort: 8081
+          resources:
+            limits:
+              memory: 64Mi
+              cpu: 50m
+          volumeMounts:
+            - name: customers-query-pv-storage
+              mountPath: /etc/data/db
+          env:
+           - name: CE_INGESTOR_URL
+             valueFrom:
+               configMapKeyRef:
+                 name: nats-config
+                 key: ce-ingestor-url

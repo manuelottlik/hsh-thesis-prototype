@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: logdna
+  namespace: argocd
+  finalizers:
+   - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  source:
+   repoURL: https://github.com/manuelottlik/hsh-thesis-prototype.git
+   targetRevision: main
+   path: .deploy/logdna
+  destination:
+   server: https://kubernetes.default.svc
+   namespace: logdna-agent
+  syncPolicy:
+   automated:
+    prune: true
+    selfHeal: true
+   syncOptions:
+    - CreateNamespace=true

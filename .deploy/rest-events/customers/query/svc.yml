@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: customers-query-service
+  labels:
+    app: customers-query-app
+spec:
+  ports:
+    - port: 8080
+      name: customers-query-app
+    - port: 8081
+      name: customers-query-events
+  selector:
+    app: customers-query-app

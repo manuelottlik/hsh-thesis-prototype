@@ -1,0 +1,162 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: Assets-Service
+  contact:
+    email: manuel.ottlik@stud.hs-hannover.de
+  license:
+    name: MIT
+servers:
+  - url: 'https://assets.rest-events.manuelottlik.de'
+tags:
+  - name: assets
+
+paths:
+  /assets:
+    get:
+      description: Get all assets
+      operationId: getAssets
+      tags:
+        - assets
+      responses:
+        "200":
+          $ref: "#/components/responses/AssetCollection"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    post:
+      description: Create a asset
+      operationId: createAsset
+      tags:
+        - assets
+      requestBody:
+        $ref: "#/components/requestBodies/Asset"
+      responses:
+        "201":
+          $ref: "#/components/responses/Asset"
+        "422":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+  /assets/{assetId}:
+    parameters:
+      - $ref: "#/components/parameters/AssetId"
+    get:
+      description: Info for a specific Asset
+      operationId: getAssetById
+      tags:
+        - assets
+      responses:
+        "200":
+          $ref: "#/components/responses/Asset"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    put:
+      description: update a specific asset
+      operationId: updateAsset
+      tags:
+        - assets
+      requestBody:
+        $ref: "#/components/requestBodies/Asset"
+      responses:
+        "201":
+          $ref: "#/components/responses/Asset"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        "422":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+    delete:
+      description: delete a asset
+      operationId: deleteAsset
+      tags:
+        - assets
+      responses:
+        "204":
+          $ref: "defaults.yml#/components/responses/DeletedObject"
+        "404":
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+        default:
+          $ref: "defaults.yml#/components/responses/DefaultProblem"
+
+components:
+  responses:
+    AssetCollection:
+      description: collection of assets
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AssetCollection"
+    Asset:
+      description: single asset
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Asset"
+
+  requestBodies:
+    Asset:
+      required: true
+      description: asset to add
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Asset"
+
+  parameters:
+    AssetId:
+      name: assetId
+      in: path
+      required: true
+      description: The id of the asset to retrieve
+      schema:
+        type: integer
+
+  schemas:
+    AssetCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Asset"
+      required:
+        - data
+    Asset:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the object
+          example: 1
+        name:
+          type: string
+          description: name of the asset
+          example: Haus am See
+          minLength: 2
+          maxLength: 255
+        value:
+          type: string
+          nullable: false
+          pattern: '^([+-])?(\d+)(?:\.(\d+))?$'
+          description: Actual monetary value as string preceded by a minus if negative or plus if positive. Plus can be omitted.
+          example: "156570.5932"
+        currency:
+          type: string
+          nullable: false
+          pattern: '^[A-Z]{3}$'
+          description: Three letter abbreviation of currency as defined in ISO-4217.
+          example: EUR
+        customerId:
+          type: integer
+          description: id of the customer this asset belongs to
+          example: 1
+      required:
+        - id
+        - name
+        - value
+        - currency
+        - customerId
