@@ -1,6 +1,6 @@
 # Prototyp für die Master-Thesis "Event-Driven Microservices – eine Antwort auf gestiegene Integrationsbedarfe zunehmend verteilter Systeme?" an der Hochschule Hannover
 
-Dieses README erklärt nicht den kompletten Aufbau dieses Prototyps. Für eine vollständige Erläuterung ist die Master-Thesis heranzuziehen.
+Dieses README erklärt nicht den kompletten Aufbau dieses Prototyps. Für eine vollständige Erläuterung ist die [Master-Thesis](https://doi.org/10.25968/opus-2139) heranzuziehen.
 
 ## Erläuterung der Ordner-Struktur
 
